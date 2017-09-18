@@ -1,0 +1,68 @@
+from socket import*
+ 
+import sys
+ 
+def isPalindrome(s):
+    if len(s) <= 1:
+        return True
+    return s[0] == s[-1] and isPalindrome(s[1:-1])
+ 
+host = '192.168.0.15'
+port=3210
+ 
+ 
+s = socket(AF_INET, SOCK_STREAM)
+s.bind((host, port))
+s.listen(1)
+ 
+ 
+client_sock, client_adr=s.accept()
+print ('client ',client_adr,' is connect')
+ 
+while True:
+ 
+  encodedMessage = client_sock.recv(1024)
+ 
+  message = encodedMessage.decode('UTF-8')
+ 
+  Message = message.replace(" ", "")
+ 
+  if isPalindrome(Message)==True :
+      print ('Get',message, 'and send it is palindrom')
+      x='yes palindrom'
+      client_sock.send(str(x).encode('UTF-8'))
+ 
+  elif Message == '\exit' :
+      x='close'
+      client_sock.send(str(x).encode('UTF-8'))
+      break
+  else:
+      print ('get answer',message, 'and send not palindrom')
+      x='not palindrom'
+      client_sock.send(str(x).encode('UTF-8'))
+      
+_____________________________________________________________________________________________________
+
+import socket
+ 
+host = '192.168.0.15'
+port = 3210
+ 
+client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+client_socket.connect((host,port))
+ 
+print('conect to palindrom')
+ 
+ 
+while True:
+    msg = input('>> ')
+ 
+    encodedMessage = msg.encode('UTF-8','strict')
+ 
+    client_socket.send(encodedMessage)
+ 
+    answer_server = client_socket.recv(1024)
+ 
+    decodedResponse = answer_server.decode('UTF-8')
+ 
+    print (decodedResponse)
